@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import Axios from 'axios';
+
+function Frase({frase}){
+  return(
+    <div className="frase">
+      <h1>{frase}</h1>
+    </div>
+  )
+}
 
 function App() {
+
+
+  const [frase, setFrase]=useState();
+
+
+  const consultarApi= async ()=>{
+
+    
+      const resultado = await Axios('https://api.chucknorris.io/jokes/random')
+
+      console.log(resultado.data.value)
+
+      setFrase(resultado.data.value)
+  }
+  
+  useEffect(
+    () =>{
+      consultarApi()
+    },[]
+  )
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="contenedor">
+      <Frase
+        frase={frase}
+      />
+
+      <button onClick={consultarApi}>Generar Nueva</button>
     </div>
-  );
+  )
 }
 
 export default App;
